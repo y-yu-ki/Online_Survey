@@ -1,5 +1,5 @@
 -- schema.sql
--- ER図0521修正.pdf に基づく PostgreSQL テーブル定義
+-- ER図0530修正.pdf に基づく PostgreSQL テーブル定義
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
@@ -24,6 +24,11 @@ CREATE TABLE surveys (
 );
 
 CREATE INDEX idx_surveys_start_at ON surveys(start_at);
+
+CREATE TABLE forbidden_words (
+    word_id SERIAL PRIMARY KEY,
+    word TEXT NOT NULL UNIQUE
+);
 
 CREATE TABLE responses (
     response_id SERIAL PRIMARY KEY,
@@ -52,7 +57,7 @@ CREATE INDEX idx_comments_user_id ON comments(user_id);
 
 CREATE TABLE likes (
     like_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
     comment_id INT NOT NULL REFERENCES comments(comment_id) ON DELETE CASCADE,
     like_type SMALLINT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

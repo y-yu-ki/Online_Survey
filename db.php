@@ -359,3 +359,20 @@ function toggle_like(int $user_id, int $comment_id, int $like_type): array
 
     return ['liked' => $liked, 'like_count' => $like_count];
 }
+
+// ========================================
+// 7. コメント・いいね関連処理
+// ========================================
+
+/**
+ * データベースから禁止文字列（NGワード）の一覧を取得する
+ */
+
+function get_forbidden_words(): array
+{
+    $sql = 'SELECT word FROM forbidden_words';
+    
+    $stmt = executeQuery($sql);
+    
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
