@@ -3,7 +3,7 @@
 require "security.php";
 $error = "";
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
-    if (Word_check($_POST["text"])){
+    if (!checkWord($_POST["text"])){
         $error = "禁止文字列が含まれています";
     }else{
         $error = "";
