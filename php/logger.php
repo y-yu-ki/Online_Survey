@@ -4,7 +4,7 @@ date_default_timezone_set('Asia/Tokyo');
 function writeLog(string $dir ,string $level, string $message): void
 {
     try{
-        $logDir = __DIR__ . '/logs';
+        $logDir = '../logs';
 
         if (!is_dir($logDir)) {
             mkdir($logDir, 0777, true);
@@ -17,7 +17,7 @@ function writeLog(string $dir ,string $level, string $message): void
             $message
         );
 
-        error_log($log, 3, __DIR__ . '/logs/app.log');
+        error_log($log, 3, '../logs/app.log');
     } catch (Throwable $e) {
         return;
     }
