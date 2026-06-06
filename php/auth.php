@@ -8,6 +8,11 @@ function start_sess(){
         ini_set('session.use_strict_mode', 1); // セッションIDの固定攻撃を防止
         ini_set('session.cookie_secure', 1); // HTTPS接続でのみクッキーを送信
         ini_set('session.cookie_samesite', 'Strict'); // クロスサイトリクエストを防止
+      
+        // セッションの有効期限を設定する
+        //デフォルトではブラウザを閉じるとセッションが終了するが、ここでは1時間に設定する
+        ini_set('session.cookie_lifetime', 3600); // クッキー側
+        ini_set('session.gc_maxlifetime', 3600); // サーバ側
 
         session_start();
     }
@@ -19,7 +24,7 @@ function start_sess(){
 function del_sess(){
     //セッションが開始されていない場合は開始する
     if(session_status() == PHP_SESSION_NONE){
-        session_start();
+        start_sess();
     }
 
     //セッション変数をすべて空にする
