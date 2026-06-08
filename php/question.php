@@ -1,6 +1,28 @@
 <?php
 require "db.php";
+require_once 'auth.php';
+
 $q_key = $_GET['question_id'] ?? '';//テストデータ対応
+
+start_sess();
+$csrf_token = generate_csrf();
+$raw_autosave = $_SESSION['autosave']['answer']['data'] ?? [];
+
+$autosave = [];
+
+print_r($raw_autosave);
+foreach ($raw_autosave as $key => $value) {
+
+    $cleanKey = preg_replace('/\[\]$/', '', $key);
+
+    // そのまま入れる（無理に配列化しない）
+    $autosave[$cleanKey] = $value;
+}
+foreach ($autosave as $key => $value) {
+    if (is_array($value) && count($value) === 1) {
+        $autosave[$key] = $value[0];
+    }
+}
 
 $r = get_survey_by_key($q_key, "question_key");
 $json = $r["survey_spec"];
@@ -40,14 +62,20 @@ foreach($r["survey_spec"]["Survey_tag"] as $tag){
 }
 echo "</ul>";
 $len = count($json["questions"]);
-echo "<form method='post' action='?question_id={$q_key}'>";
+echo "<form method='post' action='?question_id={$q_key}' id='main-form'>";
+echo "<input type='hidden' name='csrf_token' value='".htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8')."'>";
 for ($i=0; $i<$len; $i++){
     echo "<div>";
     echo "<h2>質問".($i+1).":".$json["questions"][$i]["label"]."</h2>";
     if($json["questions"][$i]["type"]=="multiple"){
         foreach($json["questions"][$i]["options"] as $item){
             $checked = '';
-            if (isset($_POST["q{$i}"]) && is_array($_POST["q{$i}"]) && in_array($item, $_POST["q{$i}"])){
+            $current = $_POST["q{$i}"] ?? $autosave["q{$i}"] ?? [];
+            $current = is_array($current) ? $current : [$current];
+            if (
+                is_array($current) &&
+                in_array($item, $current, true)
+            ){
                 $checked = 'checked';
             }
             echo "<input type='checkbox' name='q{$i}[]' value='{$item}' {$checked}>";
@@ -56,10 +84,8 @@ for ($i=0; $i<$len; $i++){
     }elseif($json["questions"][$i]["type"]=="single"){
         foreach($json["questions"][$i]["options"] as $item){
             $checked = '';
-            if (
-                isset($_POST["q{$i}"])
-                && $_POST["q{$i}"] === $item
-            ){
+            $current = $_POST["q{$i}"] ?? $autosave["q{$i}"] ?? '';
+            if ($current === $item){
                 $checked = 'checked';
             }
             echo "<input type='radio' name='q{$i}' value='{$item}' required {$checked}>";
@@ -68,7 +94,7 @@ for ($i=0; $i<$len; $i++){
     }elseif($json["questions"][$i]["type"]=="text"){
         $value="";
         $value = htmlspecialchars(
-            $_POST["q{$i}"] ?? '',
+            $autosave["q{$i}"] ?? ($_POST["q{$i}"] ?? ''),
             ENT_QUOTES,
             'UTF-8'
         );
@@ -78,3 +104,4 @@ for ($i=0; $i<$len; $i++){
 }
 echo "<button type='submit'>送信</button>";
 echo "</form>";
+echo "<script src='../js/api_manager.js'></script>";
