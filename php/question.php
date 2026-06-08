@@ -10,7 +10,6 @@ $raw_autosave = $_SESSION['autosave']['answer']['data'] ?? [];
 
 $autosave = [];
 
-print_r($raw_autosave);
 foreach ($raw_autosave as $key => $value) {
 
     $cleanKey = preg_replace('/\[\]$/', '', $key);
