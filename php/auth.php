@@ -4,15 +4,21 @@
 ====================*/
 function start_sess(){
     if(session_status() == PHP_SESSION_NONE){
-        ini_set('session.cookie_httponly', 1); // JavaScriptからクッキーへのアクセスを禁止
+        ini_set('session.gc_maxlifetime', 3600); // サーバ側の有効期限を1時間に設定する
         ini_set('session.use_strict_mode', 1); // セッションIDの固定攻撃を防止
-        ini_set('session.cookie_secure', 1); // HTTPS接続でのみクッキーを送信
-        ini_set('session.cookie_samesite', 'Strict'); // クロスサイトリクエストを防止
-      
-        // セッションの有効期限を設定する
-        //デフォルトではブラウザを閉じるとセッションが終了するが、ここでは1時間に設定する
-        ini_set('session.cookie_lifetime', 3600); // クッキー側
-        ini_set('session.gc_maxlifetime', 3600); // サーバ側
+
+         // 現在の接続がHTTPSかどうかを判定(HTTPSの時trueが返る)
+        $is_https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+        // クッキーの設定をまとめて指定
+        session_set_cookie_params([
+            'lifetime' => 3600,                     // クッキーの有効期限（1時間）
+            'path' => '/',                          // サイト全体で有効
+            'domain' => '',                         // 現在のドメイン
+            'secure' => $is_https,                  // HTTPSの時だけSecure属性をオンにする
+            'httponly' => true,                     // JavaScriptからのクッキーアクセスを禁止
+            'samesite' => 'Strict'                   // クロスサイトリクエストを防止
+        ]);
 
         session_start();
     }
