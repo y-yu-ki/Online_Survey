@@ -152,6 +152,31 @@ if ($user) {
         echo 'get_homepage_survey_list() のテストは、survey または user が存在しないためスキップされました。<br>';
     }
 
+    // --- get_all_survey_titles() のテスト ---
+    echo "<h2>テスト: 全アンケートタイトルの取得</h2>";
+    
+    try {
+        $titles = get_all_survey_titles();
+    
+        if (is_array($titles)) {
+            echo "<p>取得成功。件数: " . count($titles) . "件</p>";
+            
+            if (count($titles) > 0) {
+                echo "<ul>";
+                foreach ($titles as $title) {
+                    echo "<li>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "<p>データが0件です。db_test.sql を実行してデータを追加してください。</p>";
+            }
+        } else {
+            echo "<p style='color:red;'>エラー: 戻り値が配列ではありません。</p>";
+        }
+    } catch (Exception $e) {
+        echo "<p style='color:red;'>致命的なエラーが発生しました: " . $e->getMessage() . "</p>";
+    }
+
     // 8. コメント登録といいね切り替えの挙動を確認する。
     //    成功条件: コメントを追加し、toggle_like() でいいねの状態と件数が返ること。
     printSection('8. insert_comment() / toggle_like() のテスト');
@@ -173,9 +198,9 @@ if ($user) {
         }
     }
 
-    // 8. delete_user() のカスケード削除テスト
+    // 9. delete_user() のカスケード削除テスト
     //    成功条件: 対象ユーザーを削除すると user, surveys, responses, comments, likes が削除されること。
-    printSection('8. delete_user() のカスケード削除テスト');
+    printSection('9. delete_user() のカスケード削除テスト');
     $deleteUserName = 'delete_test_user_php';
     $deleteUser = get_user_by_name($deleteUserName);
     if (!$deleteUser) {

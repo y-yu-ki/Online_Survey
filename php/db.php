@@ -195,6 +195,18 @@ function get_surveys_list(int $limit, int $offset): array
 }
 
 /**
+ * アンケートのタイトルを全件取得する
+ */
+
+function get_all_survey_titles(): array
+{
+    $sql = 'SELECT title FROM surveys';
+    $stmt = getPdo()->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+/*
  * ホームページのアンケート一覧を取得する
  *
  * @param string $listType  一覧の種類（作成したアンケート / 回答したアンケート / アンケート / 調査結果）
