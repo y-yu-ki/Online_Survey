@@ -26,7 +26,7 @@ foreach ($autosave as $key => $value) {
 }
 
 //CSS読み込み
-echo "<head><link rel='stylesheet' href='../css/question.css'></head>";
+echo "<head><link rel='stylesheet' href='../css/question.css'><link rel='stylesheet' href='../css/footer.css'></head>";
 
 $r = get_survey_by_key($q_key, "question_key");
 if(is_null($r)){
@@ -59,6 +59,7 @@ if(is_null($r)){
 
     echo "<title>".$r['title']."</title>";
     echo "<body>";
+    echo "<main>";
     echo "<h1>".$r['title']."</h1>";
     echo "<p>".$r['survey_spec']["title"]."</p>";
     echo "<div id='tag'>";
@@ -147,5 +148,7 @@ if(is_null($r)){
     echo "<div id='submit'><button type='submit'>送信</button></div>";
     echo "</form>";
     echo "<script src='../js/api_manager.js'></script>";
+    echo "</main>";
+    require_once "footer.php";
     echo "</body>";
 }

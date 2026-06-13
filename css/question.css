@@ -1,12 +1,16 @@
 body{
-    padding: 0 10% 0 10%;
     background-color: #164a84;
     color: aliceblue;
+    margin: 0;
 }
-body h1{
+
+main{
+    padding: 0 10% 0 10%;
+}
+main h1{
     font-size: xx-large;
 }
-body h2{
+main h2{
     font-size: large;
 }
 
