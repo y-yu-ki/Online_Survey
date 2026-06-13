@@ -1,6 +1,7 @@
 body{
-    padding: 10% 10%;
-    background-color: aqua;
+    padding: 0 10% 0 10%;
+    background-color: #164a84;
+    color: aliceblue;
 }
 body h1{
     font-size: xx-large;
@@ -9,15 +10,55 @@ body h2{
     font-size: large;
 }
 
-.question{
-    display: block;
-    padding: 20px 20px;
-    width: auto;
-    height: auto;
-    border: solid 2px;
-    border-color: black;
+#tag ul{
+    display: flex;
+    justify-content: left;
 }
+
+#tag li{
+    list-style: none;   /* 点を消す */
+    padding-left: 0;    /* 左の余白を消す */
+    margin-left: 1em; 
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    min-width: 3em;
+    max-width: auto;
+    height: 2em;
+    text-align: center;
+    padding: 0.1em 0.1em 0.1em 0.1em;
+}
+
 .option{
-    display: block;
+    display:block;
+    padding:15px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:10px;
+    cursor:pointer;
+    background-color: #5383c3;
+}
+.question h2{
+    padding: 10px 10px;
+}
+.q_text textarea{
+    width: 100%;
+    height: 100px;
+}
+.question input[type="date"] {
+    border-radius: 10px;
+    border: 1px solid #ccc;
     padding: 10px;
+    font-size: 14px;
+}
+#submit{
+    display: flex;
+    justify-content: center;
+}
+#submit button{
+    background-color: #e95464;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    margin: 20px 10px;
 }
