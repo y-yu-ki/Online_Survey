@@ -125,20 +125,18 @@ $result_surveys = [];
 
 try {
     if ($is_logged_in) {
-        $created_surveys  = get_homepage_survey_list('作成したアンケート', $sort_order, $current_user_id);
-        $answered_surveys = get_homepage_survey_list('回答したアンケート', $sort_order, $current_user_id);
+        $created_surveys  = get_homepage_survey_list('作成したアンケート', $sort_order, $current_user_id, $limit, $offset_active);
+        $answered_surveys = get_homepage_survey_list('回答したアンケート', $sort_order, $current_user_id, $limit, $offset_active);
     }
     
-    $all_active_surveys = get_homepage_survey_list('アンケート', $sort_order, null);
-    $all_result_surveys = get_homepage_survey_list('調査結果', $sort_order, null);
-
+    $all_active_surveys = get_homepage_survey_list('アンケート', $sort_order, null, 10000, 0);
+    $all_result_surveys = get_homepage_survey_list('調査結果', $sort_order, null, 10000, 0);
     $total_active = count($all_active_surveys);
     $total_pages_active = ceil($total_active / $limit);
-    $active_surveys = array_slice($all_active_surveys, $offset_active, $limit);
-
+    $active_surveys = get_homepage_survey_list('アンケート', $sort_order, null, $limit, $offset_active);
     $total_result = count($all_result_surveys);
     $total_pages_result = ceil($total_result / $limit);
-    $result_surveys = array_slice($all_result_surveys, $offset_result, $limit);
+    $result_surveys = get_homepage_survey_list('調査結果', $sort_order, null, $limit, $offset_result);
 
 } catch (Exception $e) {
     error_log("データ抽出エラー: " . $e->getMessage());
