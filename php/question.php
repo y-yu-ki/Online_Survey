@@ -1,7 +1,6 @@
 <?php
 require "db.php";
 require_once 'auth.php';
-require_once 'header.php';
 require_once 'security.php';
 require_once 'error.php';
 $q_key = $_GET['question_id'] ?? '';
@@ -27,7 +26,9 @@ foreach ($autosave as $key => $value) {
 }
 
 //CSS読み込み
-echo "<head><link rel='stylesheet' href='../css/question.css'><link rel='stylesheet' href='../css/footer.css'></head>";
+echo "<head><link rel='stylesheet' href='../css/question.css'><link rel='stylesheet' href='../css/footer.css'>";
+echo "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'>";
+echo "<script src='https://cdn.tailwindcss.com'></script></head>";
 
 $r = get_survey_by_key($q_key, "question_key");
 if(is_null($r)){
@@ -59,6 +60,7 @@ if(is_null($r)){
 
     echo "<title>".$r['title']."</title>";
     echo "<body>";
+    include "header.php";
     echo "<main>";
     echo "<h1>".$r['title']."</h1>";
     echo "<p>".$r['survey_spec']["title"]."</p>";
