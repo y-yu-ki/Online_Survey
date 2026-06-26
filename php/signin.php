@@ -40,14 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // -----------------------------------------------------------------
         $user = get_user_by_name($username);
         // 該当するユーザーが存在し、パスワードが一致するか検証
-        #if ($user && password_verify($password, $user['password_hash'])) {
-        if(!is_null($user) && $password == $user['password_hash']){
+        if ($user && password_verify($password, $user['password_hash'])) {
             // セッション固定攻撃対策：ログイン成功時にセッションIDを再生成
             session_regenerate_id(true);
 
             // セッションにユーザー情報を格納
-            // $_SESSION['user_id'] = $user['id']; 
-            // $_SESSION['username'] = $user['username'];
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['account_name'];
             $_SESSION['last_acc'] = time(); // タイムアウト判定用のタイムスタンプ

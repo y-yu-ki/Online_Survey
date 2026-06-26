@@ -211,9 +211,11 @@ function get_all_survey_titles(): array
  * @param string $listType  一覧の種類（作成したアンケート / 回答したアンケート / アンケート / 調査結果）
  * @param string $sortOrder 並び替え順（開始期限 / 新着 / 回答数）
  * @param int|null $user_id ユーザーID（作成・回答・調査結果表示時に必要）
+ * @param int $limit 取得件数
+ * @param int $offset 取得開始位置
  * @return array
  */
-function get_homepage_survey_list(string $listType, string $sortOrder, ?int $user_id = null): array
+function get_homepage_survey_list(string $listType, string $sortOrder, ?int $user_id = null, int $limit = 100, int $offset = 0): array
 {
     $typeMap = [
         '作成したアンケート' => 'created',
@@ -284,7 +286,20 @@ function get_homepage_survey_list(string $listType, string $sortOrder, ?int $use
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
     }
 
-    $sql .= ' ORDER BY ' . $orderBy;
+    $sql .= " ORDER BY {$orderBy} LIMIT :limit OFFSET :offset";
+
+    // ページネーション用パラメータを確実に整数にキャストして設定
+    $limit = (int)$limit;
+    $offset = (int)$offset;
+    if ($limit <= 0) {
+        $limit = 100;
+    }
+    if ($offset < 0) {
+        $offset = 0;
+    }
+
+    $params[':limit'] = $limit;
+    $params[':offset'] = $offset;
 
     $stmt = executeQuery($sql, $params);
     $rows = $stmt->fetchAll();
@@ -329,7 +344,7 @@ function extend_survey_deadline(int $survey_id, int $user_id, string $new_end_at
         $newEndAtFormatted = date('c', $parsedTime);
 
         $sql = "UPDATE surveys 
-                SET end_at = :new_end_at::TIMESTAMPTZ,
+                SET end_at = :new_end_at,
                     updated_at = NOW()
                 WHERE survey_id = :survey_id AND creator_id = :user_id
                 RETURNING end_at";
@@ -355,22 +370,21 @@ function extend_survey_deadline(int $survey_id, int $user_id, string $new_end_at
 /**
  * survey_spec から所要時間を取得する
  */
-function parse_survey_duration(array $surveySpec): string
+function parse_survey_duration(array $surveySpec): int
 {
-    if (isset($surveySpec['estimated_minutes']) && $surveySpec['estimated_minutes'] !== '') {
-        return (string)$surveySpec['estimated_minutes'] . '分';
+    if (isset($surveySpec['estimated_minutes'])) {
+        return (int)$surveySpec['estimated_minutes'];
     }
 
-    if (isset($surveySpec['duration']) && $surveySpec['duration'] !== '') {
-        return (string)$surveySpec['duration'];
+    if (isset($surveySpec['duration'])) {
+        return (int)$surveySpec['duration'];
     }
 
     if (isset($surveySpec['questions']) && is_array($surveySpec['questions'])) {
-        $questionCount = count($surveySpec['questions']);
-        return $questionCount > 0 ? (string)$questionCount . '分' : '';
+        return count($surveySpec['questions']);
     }
 
-    return '';
+    return 0;
 }
 
 /**

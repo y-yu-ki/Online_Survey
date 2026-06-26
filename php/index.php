@@ -907,7 +907,7 @@ try {
                             <span>村上 悠</span>
                             <span>吉守 祥</span>
                             <span>湯場崎 啓心</span>
-                            <span>折本 敢太</span>
+                            <span>折元 敢太</span>
                             <span>酒匂 莉乃</span>
                         </div>
                         <div class="member-col">
