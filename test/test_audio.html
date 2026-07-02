@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>音のテスト</title>
+</head>
+<body>
+
+    <h1>鳴らし放題</h1>
+    <p>いいですね！</p>
+
+    <button onclick="playTest()">🔊 音を鳴らす</button>
+
+    <script>
+    function playTest() {
+        // パスは「このHTMLファイルから見た音声ファイルの位置」に合わせてください
+        const audio = new Audio('../assets/iidesune_doukome.mp3');
+        
+        audio.play()
+            .then(() => {
+                console.log("再生成功！");
+            })
+            .catch(e => {
+                console.error("再生失敗:", e);
+                alert("エラーが発生しました。ファイルのパスが間違っているか、ブラウザにブロックされた可能性があります。\nエラー内容: " + e.message);
+            });
+    }
+    </script>
+
+</body>
+</html>
