@@ -239,6 +239,8 @@ function get_homepage_survey_list(string $listType, string $sortOrder, ?int $use
     $sql = 'SELECT s.survey_id,
                    s.title,
                    s.end_at,
+                   s.question_key,
+                   s.result_key,
                    u.account_name AS creator,
                    COALESCE(resp.response_count, 0) AS response_count,
                    s.survey_spec
@@ -319,6 +321,8 @@ function get_homepage_survey_list(string $listType, string $sortOrder, ?int $use
             'creator' => (string)$row['creator'],
             'response_count' => (int)$row['response_count'],
             'duration' => $row['duration'],
+            'question_key' => (string)($row['question_key'] ?? ''),
+            'result_key' => (string)($row['result_key'] ?? ''),
         ];
     }, $rows);
 }
