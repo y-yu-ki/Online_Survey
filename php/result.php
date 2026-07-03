@@ -228,6 +228,6 @@ Chart.defaults.color = '#ffffff';
 
 <script src="api_manager.js"></script>
 
-<?php require_once 'header.php'; // footer.phpの代わりに共通定義されているheaderファイル内のフッター部分を反映、あるいはfooter.phpがあればそちらを指定してください ?>
+<?php require_once 'footer.php'; ?>
 </body>
 </html>
