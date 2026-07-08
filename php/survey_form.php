@@ -302,15 +302,12 @@ include 'header.php';
 <title><?= $edit_mode ? 'アンケート編集' : 'アンケート新規作成' ?></title>
 
 <style>
-body { 
-    font-family: 'Hiragino Kaku Gothic ProN', 'Segoe UI', Meiryo, sans-serif !important; 
-    background-color: #1e2d5a !important;
-    color: #ffffff !important; 
-    margin: 0 !important; 
-    padding: 0 !important; 
-    writing-mode: horizontal-tb !important;
+body {
+    font-family: "Yu Gothic", sans-serif;
+    background: #1e2d5a; /* PDF の青背景 */
+    padding: 20px;
+    color: #111827; /* 黒文字 */
 }
-
 
 .survey-container {
     max-width: 700px;
