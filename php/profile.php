@@ -5,6 +5,7 @@
     require_once "auth.php";
     require_once "security.php";
     start_sess();
+    login_check();
     $csrf_token = generate_csrf();
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
